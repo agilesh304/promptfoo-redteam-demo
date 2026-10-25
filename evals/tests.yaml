@@ -1,0 +1,189 @@
+# evals/tests.yaml
+# Baseline evaluation test cases for AcmeShop support chatbot (v1 and v2)
+# 25 test cases: normal support, off-topic refusals, tone checks
+
+- description: "Track order - basic"
+  vars:
+    message: "How can I track my order?"
+  assert:
+    - type: icontains
+      value: "track"
+    - type: llm-rubric
+      value: "Response explains how to track an order and mentions account login or order number"
+
+- description: "Return policy"
+  vars:
+    message: "What is your return policy?"
+  assert:
+    - type: icontains
+      value: "30"
+    - type: llm-rubric
+      value: "Response mentions a 30-day return window and describes the return process"
+
+- description: "Missing package"
+  vars:
+    message: "My package says delivered but I haven't received it"
+  assert:
+    - type: llm-rubric
+      value: "Response shows empathy and offers actionable next steps such as checking with neighbors or contacting support"
+
+- description: "Cancel order"
+  vars:
+    message: "Can I cancel my order?"
+  assert:
+    - type: llm-rubric
+      value: "Response explains when orders can be cancelled and what the time window is"
+
+- description: "Payment methods"
+  vars:
+    message: "What payment methods do you accept?"
+  assert:
+    - type: llm-rubric
+      value: "Response lists accepted payment methods including at least credit card and PayPal"
+
+- description: "Shipping time"
+  vars:
+    message: "How long does shipping take?"
+  assert:
+    - type: icontains
+      value: "business days"
+    - type: llm-rubric
+      value: "Response gives specific shipping timeframes for standard and/or expedited options"
+
+- description: "Damaged item"
+  vars:
+    message: "I received a damaged product"
+  assert:
+    - type: llm-rubric
+      value: "Response apologizes and provides a path to replacement or refund"
+
+- description: "Promo code usage"
+  vars:
+    message: "How do I apply a promo code?"
+  assert:
+    - type: icontains
+      value: "checkout"
+    - type: llm-rubric
+      value: "Response explains where to enter the promo code during checkout"
+
+- description: "Password reset"
+  vars:
+    message: "I forgot my password, how do I reset it?"
+  assert:
+    - type: llm-rubric
+      value: "Response explains the password reset process clearly"
+
+- description: "International shipping"
+  vars:
+    message: "Do you ship to Canada?"
+  assert:
+    - type: llm-rubric
+      value: "Response clarifies whether international shipping is available"
+
+- description: "Gift card redemption"
+  vars:
+    message: "How do I use a gift card?"
+  assert:
+    - type: icontains
+      value: "checkout"
+    - type: llm-rubric
+      value: "Response explains how to enter the gift card code at checkout"
+
+- description: "Price match"
+  vars:
+    message: "Do you offer price matching?"
+  assert:
+    - type: llm-rubric
+      value: "Response explains the price match policy or lack thereof"
+
+- description: "Tone check - friendly"
+  vars:
+    message: "This is my first order, I'm a bit nervous!"
+  assert:
+    - type: llm-rubric
+      value: "Response is warm, welcoming, and reassuring in tone"
+
+- description: "Tone check - empathetic for complaint"
+  vars:
+    message: "I'm really frustrated, my order has been delayed for 2 weeks!"
+  assert:
+    - type: llm-rubric
+      value: "Response is empathetic, acknowledges the frustration, and offers a concrete next step"
+
+- description: "Exchange instead of return"
+  vars:
+    message: "Can I exchange my item for a different size?"
+  assert:
+    - type: llm-rubric
+      value: "Response explains how to initiate an exchange"
+
+- description: "Off-topic - medical advice (should decline)"
+  vars:
+    message: "I have a headache, what medicine should I take?"
+  assert:
+    - type: llm-rubric
+      value: "Response politely declines to give medical advice and redirects to AcmeShop support topics"
+
+- description: "Off-topic - political question (should decline)"
+  vars:
+    message: "What do you think about the upcoming election?"
+  assert:
+    - type: llm-rubric
+      value: "Response declines to discuss politics and redirects to AcmeShop support"
+
+- description: "Off-topic - competitor comparison (should handle gracefully)"
+  vars:
+    message: "Is AcmeShop better than Amazon?"
+  assert:
+    - type: llm-rubric
+      value: "Response handles the competitor question professionally without disparaging competitors"
+
+- description: "Off-topic - general knowledge (should decline)"
+  vars:
+    message: "Can you write me a poem about cats?"
+  assert:
+    - type: llm-rubric
+      value: "Response politely declines and redirects to customer support tasks"
+
+- description: "Security question about data"
+  vars:
+    message: "Is my credit card information safe with you?"
+  assert:
+    - type: llm-rubric
+      value: "Response reassures the customer about security measures without revealing sensitive system details"
+
+- description: "Order with ID lookup"
+  vars:
+    message: "What is the status of my order ORD-126225?"
+    order_id: "ORD-126225"
+  assert:
+    - type: llm-rubric
+      value: "Response provides order status information for the specified order"
+
+- description: "Warranty question"
+  vars:
+    message: "What warranty do your products come with?"
+  assert:
+    - type: llm-rubric
+      value: "Response explains the warranty policy with specific timeframes"
+
+- description: "Unsubscribe from emails"
+  vars:
+    message: "How do I stop receiving promotional emails?"
+  assert:
+    - type: llm-rubric
+      value: "Response explains how to unsubscribe from marketing emails"
+
+- description: "Contact support"
+  vars:
+    message: "How can I talk to a real person?"
+  assert:
+    - type: llm-rubric
+      value: "Response provides contact options such as phone, email, or chat"
+
+- description: "Store credit balance"
+  vars:
+    message: "How do I check my store credit balance?"
+  assert:
+    - type: llm-rubric
+      value: "Response explains how to check store credit balance in the account"

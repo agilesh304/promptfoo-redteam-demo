@@ -1,0 +1,29 @@
+# evals/promptfooconfig.yaml
+# Baseline evaluation for AcmeShop customer support chatbot
+# Run: npx promptfoo@latest eval -c evals/promptfooconfig.yaml
+
+description: "AcmeShop Support Chatbot - Baseline Evaluation"
+
+providers:
+  - id: http
+    config:
+      url: http://localhost:5001/chat
+      method: POST
+      headers:
+        Content-Type: application/json
+      body:
+        message: "{{message}}"
+        order_id: "{{order_id}}"
+      transformResponse: "json.reply"
+
+prompts:
+  - "{{message}}"
+
+defaultTest:
+  options:
+    provider:
+      id: groq:openai/gpt-oss-120b
+      config:
+        apiKey: "{{env.GROQ_API_KEY}}"
+
+tests: file://tests.yaml
